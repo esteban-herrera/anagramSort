@@ -56,4 +56,10 @@ public class unitTests {
      public void hello() {
          assertTrue(true);
      }
+     
+     @Test
+     public void testAnagram() {
+         ArrayList ar = new ArrayList();
+         ar.addAll(ar);
+     }    
 }

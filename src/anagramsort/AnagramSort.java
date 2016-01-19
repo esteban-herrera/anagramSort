@@ -18,21 +18,28 @@ public class AnagramSort {
      * @param args the command line arguments
      */
     public static void main(String[] args) throws FileNotFoundException {
-        File file = new File("/Users/estebanherrera/NetBeansProjects/anagramSort/src/anagramsort/sortableAnagramList.txt");
-        Scanner fileScanner = new Scanner(file);
+        ArrayList sortableStringArray = buildArrayFromFile(new File("/Users/estebanherrera/NetBeansProjects/anagramSort/src/anagramsort/sortableAnagramList.txt"));
+        System.out.println(sortableStringArray.toString());
+        
+        Map mapOfSignaturesAndIndexes = makeMap(sortableStringArray);
+        System.out.println(mapOfSignaturesAndIndexes.toString());
+        
+        printSortedArray(sortableStringArray, mapOfSignaturesAndIndexes);
+    }
+
+    public static ArrayList buildArrayFromFile(File f) throws FileNotFoundException {
+        Scanner fileScanner = new Scanner(f);
         ArrayList sortableStringArray = new ArrayList();
         while(fileScanner.hasNextLine()) {
             sortableStringArray.add(fileScanner.nextLine());
         }
-        alphabetizeStringsInArray(sortableStringArray);
-        Map mapOfSignaturesAndIndexes = new HashMap<String,ArrayList>();
+        return sortableStringArray;
+    }
 
+    public static Map makeMap(ArrayList sortableStringArray) {            
+        Map mapOfSignaturesAndIndexes = new HashMap<String,ArrayList>();
         for(int i=0; i<sortableStringArray.size(); i++) {
-            
-            String str = sortableStringArray.get(i).toString();
-            char[] charArray = str.toCharArray();
-            Arrays.sort(charArray);    
-            String signature = String.valueOf(charArray);
+            String signature = alphabetizeString(sortableStringArray.get(i).toString());
             
             if(mapOfSignaturesAndIndexes.containsKey(signature)) {                
                 ArrayList indexesForThisSignature = (ArrayList)mapOfSignaturesAndIndexes.get(signature);
@@ -44,21 +51,20 @@ public class AnagramSort {
                 mapOfSignaturesAndIndexes.put(signature,indexesOfWordsWithThisSignature);
             }
         }
-        
-        System.out.println(mapOfSignaturesAndIndexes.toString());
-        
+        return mapOfSignaturesAndIndexes;
     }
-    
-    public static void alphabetizeStringsInArray(ArrayList ar) {
-        for(Object s: ar) {
-            alphabetizeString(s.toString());
-        }
-    }
-    
-    public static String alphabetizeString(String str) {
+        
+    private static String alphabetizeString(String str) {
         char[] charArray = str.toCharArray();
         Arrays.sort(charArray);    
         return String.valueOf(charArray);
     }
-
+    
+    public static void printSortedArray(ArrayList unsortedList, Map indexes) {
+        indexes.keySet().stream().forEach((key) -> {
+            for(Object i : (ArrayList) indexes.get(key)) {                
+                System.out.print(unsortedList.get((int)i) + " ");
+            }
+        });
+    }
 }
