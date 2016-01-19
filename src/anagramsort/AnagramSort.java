@@ -14,32 +14,36 @@ import java.util.*;
  */
 public class AnagramSort {
 
+    static Map mapOfSignaturesAndIndexes = new HashMap<String,ArrayList>();
+    static ArrayList unsortedList = new ArrayList();
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) throws FileNotFoundException {
-        ArrayList sortableStringArray = buildArrayFromFile(new File("/Users/estebanherrera/NetBeansProjects/anagramSort/src/anagramsort/sortableAnagramList.txt"));
-        System.out.println(sortableStringArray.toString());
+//        ArrayList sortableStringArray = buildArrayFromFile(new File("/Users/estebanherrera/NetBeansProjects/anagramSort/src/anagramsort/sortableAnagramList.txt"));
         
-        Map mapOfSignaturesAndIndexes = makeMap(sortableStringArray);
-        System.out.println(mapOfSignaturesAndIndexes.toString());
+//        Map mapOfSignaturesAndIndexes = makeMap(sortableStringArray);
+//        System.out.println(mapOfSignaturesAndIndexes.toString());
         
-        printSortedArray(sortableStringArray, mapOfSignaturesAndIndexes);
+//        printSortedArray(sortableStringArray, mapOfSignaturesAndIndexes);
     }
 
-    public static ArrayList buildArrayFromFile(File f) throws FileNotFoundException {
-        Scanner fileScanner = new Scanner(f);
-        ArrayList sortableStringArray = new ArrayList();
-        while(fileScanner.hasNextLine()) {
-            sortableStringArray.add(fileScanner.nextLine());
-        }
-        return sortableStringArray;
+//    public static ArrayList buildArrayFromFile(File f) throws FileNotFoundException {
+//        Scanner fileScanner = new Scanner(f);
+//        ArrayList sortableStringArray = new ArrayList();
+//        while(fileScanner.hasNextLine()) {
+//            sortableStringArray.add(fileScanner.nextLine());
+//        }
+//        return sortableStringArray;
+//    }
+    
+    public static void acceptUnsortedArray(String[] ar) {
+        unsortedList.addAll(Arrays.asList(ar));
     }
 
-    public static Map makeMap(ArrayList sortableStringArray) {            
-        Map mapOfSignaturesAndIndexes = new HashMap<String,ArrayList>();
-        for(int i=0; i<sortableStringArray.size(); i++) {
-            String signature = alphabetizeString(sortableStringArray.get(i).toString());
+    public static void makeMap() {            
+        for(int i=0; i<unsortedList.size(); i++) {
+            String signature = alphabetizeString(unsortedList.get(i).toString());
             
             if(mapOfSignaturesAndIndexes.containsKey(signature)) {                
                 ArrayList indexesForThisSignature = (ArrayList)mapOfSignaturesAndIndexes.get(signature);
@@ -51,7 +55,6 @@ public class AnagramSort {
                 mapOfSignaturesAndIndexes.put(signature,indexesOfWordsWithThisSignature);
             }
         }
-        return mapOfSignaturesAndIndexes;
     }
         
     private static String alphabetizeString(String str) {
@@ -60,11 +63,32 @@ public class AnagramSort {
         return String.valueOf(charArray);
     }
     
-    public static void printSortedArray(ArrayList unsortedList, Map indexes) {
-        indexes.keySet().stream().forEach((key) -> {
-            for(Object i : (ArrayList) indexes.get(key)) {                
+    public static void printSortedArray() {
+        mapOfSignaturesAndIndexes.keySet().stream().forEach((key) -> {
+            for(Object i : (ArrayList) mapOfSignaturesAndIndexes.get(key)) {                
                 System.out.print(unsortedList.get((int)i) + " ");
             }
         });
+    }
+    
+    public static String[] buildSortedArray() {
+        String[] sortedArray = new String[unsortedList.size()];
+//        mapOfSignaturesAndIndexes.keySet().stream().forEach((key) -> {            
+//            for(Object i : (ArrayList) mapOfSignaturesAndIndexes.get(key)) {
+//                sortedArray[index] = (String) unsortedList.get((int)i);
+//                index += 1;
+//            }
+//        });
+        
+        int index = 0;
+        for (Object key: mapOfSignaturesAndIndexes.keySet()){
+            for(Object i : (ArrayList) mapOfSignaturesAndIndexes.get(key)) {
+                sortedArray[index] = (String) unsortedList.get((int)i);
+                index += 1;
+            }
+        }
+        
+        
+        return sortedArray;
     }
 }

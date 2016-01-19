@@ -58,8 +58,29 @@ public class unitTests {
      }
      
      @Test
-     public void testAnagram() {
-         ArrayList ar = new ArrayList();
-         ar.addAll(ar);
-     }    
+     public void testAnagramShortList() {
+         String[] unsorted = {"CAT", "BOB", "ACT"};
+         // Build unsorted ArrayList
+         anagramsort.AnagramSort.acceptUnsortedArray(unsorted);
+         // Make map with signatures, indexes
+         anagramsort.AnagramSort.makeMap();
+         // Build sorted array
+         String[] result = anagramsort.AnagramSort.buildSortedArray();
+         String[] expected = {"CAT", "ACT", "BOB"};
+         assertArrayEquals(expected, result);         
+     }
+
+     
+     @Test
+     public void testAnagramLongList() {
+         String[] unsorted = {"CAT", "ACT", "BOB", "OBB", "LOB", "BOL", "TRAP", "PART", "DDA", "LICK", "PICK", "OHM", "HOM", "DOG", "GOD", "FOG", "GOLF", "FROG", "DAD", "ADD"};
+         // Build unsorted ArrayList
+         anagramsort.AnagramSort.acceptUnsortedArray(unsorted);
+         // Make map with signatures, indexes
+         anagramsort.AnagramSort.makeMap();
+         // Build sorted array
+         String[] result = anagramsort.AnagramSort.buildSortedArray();
+         String[] expected = {"DDA", "DAD", "ADD", "CAT", "ACT", "LOB", "BOL", "PICK", "GOLF", "FROG", "LICK", "OHM", "HOM", "DOG", "GOD", "BOB", "OBB", "TRAP", "PART", "FOG"};
+         assertArrayEquals(expected, result);         
+     }
 }
